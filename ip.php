@@ -1,4 +1,8 @@
 <?php
+if(!isset($_GET['MachineID'])){
+	die(403);
+}
+
 //look up what the local definition of the ip adress was for that machine 
 $servername = "localhost";
 $username = "timepcou_iptrack";
@@ -16,24 +20,27 @@ catch(PDOException $e)
     }
 
 
-
-$stmt = $conn->prepare("select * from IPTrack where MachineID=:MID ORDER BY DateUpdated DESC");
+try { 
+$stmt = $conn->prepare("select * from TrustedIP where Machine=:MID ORDER BY DateUpdated DESC");
 $stmt->bindParam(':MID',$_GET['MachineID']);
 $stmt->execute();
-// set the resulting array to associative
-$result = $stmt->setFetchMode(PDO::FETCH_ASSOC); 
-foreach(new TableRows(new RecursiveArrayIterator($stmt->fetchAll())) as $k=>$v) { 
-    echo $v;
+$StoredMachineIP = $stmt->fetch()['IP'];
 }
-if($StoredMachineID==$_GET['MachineID']){
+catch(PDOException $e){
+	echo 'fail' . $e->getMessage();
+}
+
+if($StoredMachineIP==$_SERVER['REMOTE_ADDR']){
     echo '1'; //no error,  no change
 }else{
     echo '2'; //no error, changed
-    query("insert into IPTrack (MachineID,IP) values($MachineID,$ip)");
+    $stmt = $conn->prepare("insert into TrustedIP (Machine,IP) values(:MID,:IP)");
+    $stmt->bindParam(':MID',$_GET['MachineID']);
+    $stmt->bindParam(':IP',$_SERVER['REMOTE_ADDR'] );
+    $stmt->execute();
 }
 
 //check the other addresses to make sure everyone is present
 //query("select max(DateUpdated) from IPTrack where ... GROUP BY MachineID");
 
 //if a device hasn't registered recently then alert James to this fault
-
