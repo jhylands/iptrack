@@ -16,8 +16,15 @@ catch(PDOException $e)
     }
 
 
-/*
-query("select * from IPTrack where MachineID=? ORDER BY DateUpdated DESC",$_POST['MachineID']);
+
+$stmt = $conn->prepare("select * from IPTrack where MachineID=:MID ORDER BY DateUpdated DESC");
+$stmt->bindParam(':MID',$_POST['MachineID']);
+$stmt->execute();
+// set the resulting array to associative
+$result = $stmt->setFetchMode(PDO::FETCH_ASSOC); 
+foreach(new TableRows(new RecursiveArrayIterator($stmt->fetchAll())) as $k=>$v) { 
+    echo $v;
+}
 if($StoredMachineID==$_POST['MachineID']){
     echo '1'; //no error,  no change
 }else{
@@ -29,4 +36,4 @@ if($StoredMachineID==$_POST['MachineID']){
 //query("select max(DateUpdated) from IPTrack where ... GROUP BY MachineID");
 
 //if a device hasn't registered recently then alert James to this fault
-*/
+
