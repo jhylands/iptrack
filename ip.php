@@ -18,14 +18,14 @@ catch(PDOException $e)
 
 
 $stmt = $conn->prepare("select * from IPTrack where MachineID=:MID ORDER BY DateUpdated DESC");
-$stmt->bindParam(':MID',$_POST['MachineID']);
+$stmt->bindParam(':MID',$_GET['MachineID']);
 $stmt->execute();
 // set the resulting array to associative
 $result = $stmt->setFetchMode(PDO::FETCH_ASSOC); 
 foreach(new TableRows(new RecursiveArrayIterator($stmt->fetchAll())) as $k=>$v) { 
     echo $v;
 }
-if($StoredMachineID==$_POST['MachineID']){
+if($StoredMachineID==$_GET['MachineID']){
     echo '1'; //no error,  no change
 }else{
     echo '2'; //no error, changed
