@@ -17,14 +17,14 @@ try {
 catch(PDOException $e)
     {
     echo "Connection failed: " . $e->getMessage();
-    }
+} 
 
 
 try { 
-$stmt = $conn->prepare("select * from TrustedIP where Machine=:MID ORDER BY DateUpdated DESC");
-$stmt->bindParam(':MID',$_GET['MachineID']);
-$stmt->execute();
-$StoredMachineIP = $stmt->fetch()['IP'];
+    $stmt = $conn->prepare("select * from TrustedIP where Machine=:MID ORDER BY DateUpdated DESC");
+    $stmt->bindParam(':MID',$_GET['MachineID']);
+    $stmt->execute();
+    $StoredMachineIP = $stmt->fetch()['IP'];
 }
 catch(PDOException $e){
 	echo 'fail' . $e->getMessage();
@@ -44,3 +44,9 @@ if($StoredMachineIP==$_SERVER['REMOTE_ADDR']){
 //query("select max(DateUpdated) from IPTrack where ... GROUP BY MachineID");
 
 //if a device hasn't registered recently then alert James to this fault
+$stmt = $conn->prepare("SELECT * FROM (select Machine,max(DateUpdated) as DateUpdated from `TrustedIP` GROUP by Machine) as lastCheckin WHERE lastCheckin.DateUpdated <now()-INTERVAL 1 HOUR");
+$stmt->execute();
+foreach ($stmt->fetchAll(PDO::FETCH_ASSOC) as $row) {
+    echo $row['Machine'] . "<br />";
+}
+
