@@ -23,6 +23,6 @@ def checkPeople():
 
 
 while True:
-        urllib2.urlopen("http://timep.co.uk/task.php?set=1").read()
+        urllib2.urlopen("http://ip.timep.co.uk/ip.php?MachineID=1").read()
         time.sleep(3600)
 
