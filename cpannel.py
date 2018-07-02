@@ -13,7 +13,7 @@ location = request.headers['Location']
 #print request.content
 key =  location[1:17]
 print "key:%s"%key
-host = "81.151.241.85"
-request_url = "http://31.220.21.84:2082/" + key + "/frontend/paper_lantern/sql/addhost.html?host=" + host
+ip = "81.151.241.85"
+request_url = "http://31.220.21.84:2082/" + key + "/json-api/cpanel?" + "cpanel_jsonapi_apiversion=2&cpanel_jsonapi_module=ZoneEdit&cpanel_jsonapi_func=edit_zone_record&domain=timep.co.uk&name=hoome.timep.co.uk.&type=A&class=IN&ttl=3600&line=33&address=" + ip ;
 response = session_requests.get(request_url)
 #print(response.content)
