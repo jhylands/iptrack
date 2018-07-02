@@ -6,8 +6,8 @@ include 'sqlConnect.php';
 $machine = $_GET['MachineID'];
 
 //serve the ip of the machine 
-$con = MYSQLconnect();
-$stmt = $con->prepare("select ip from IPTrack where MachineID = :MID");
+$con = SQLconnect(0);
+$stmt = $con->prepare("select ip from TrustedIP where Machine = :MID");
 $stmt->bindParam(':MID',$machine);
 $stmt->execute();
 echo $stmt->fetch()['ip'];
