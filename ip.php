@@ -31,9 +31,9 @@ catch(PDOException $e){
 }
 
 if($StoredMachineIP==$_SERVER['REMOTE_ADDR']){
-    echo '1'; //no error,  no change
+    echo '<p>1</p>'; //no error,  no change
 }else{
-    echo '2'; //no error, changed
+    echo '<p>2</p>'; //no error, changed
     $stmt = $conn->prepare("insert into TrustedIP (Machine,IP) values(:MID,:IP)");
     $stmt->bindParam(':MID',$_GET['MachineID']);
     $stmt->bindParam(':IP',$_SERVER['REMOTE_ADDR'] );
