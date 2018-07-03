@@ -32,7 +32,7 @@ catch(PDOException $e){
 
 if($StoredMachineIP==$_SERVER['REMOTE_ADDR']){
     echo '<p>1</p>'; //no error,  no change
-    $stmt = $conn->prepare("Update TrustedIP set DateUpdated=now() where Machine=:MID order by DateUpdated limit 1");
+    $stmt = $conn->prepare("Update TrustedIP set DateUpdated=now() where Machine=:MID order by DateUpdated DESC limit 1");
     $stmt->bindParam(':MID',$_GET['MachineID']);
     $stmt->execute();
 }else{
