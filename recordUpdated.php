@@ -7,7 +7,7 @@ $machine = $_GET['MachineID'];
 
 //serve the ip of the machine 
 $con = SQLconnect(0);
-$stmt = $con->prepare("select ip from TrustedIP where Machine = :MID");
+$stmt = $con->prepare("select ip from TrustedIP where Machine = :MID order by DateUpdated");
 $stmt->bindParam(':MID',$machine);
 $stmt->execute();
 echo $stmt->fetch()['ip'];
